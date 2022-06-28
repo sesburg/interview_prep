@@ -1,11 +1,12 @@
 #Given n x m map and player's current position,
 #return the number of spaces the player moved before stopping
 
-
+''''
 n, m = map(int, input().split())
 x, y, face = map(int, input().split())
 
 world = [list(map(int, input().split())) for _ in range(n)]
+'''
 
 #dx and dy correspoinding to north, east, south, west
 dx = [-1, 0, 1, 0]
@@ -13,6 +14,11 @@ dy = [0, 1, 0, -1]
 
 res = 1
 visited = set()
+world = None
+
+def set_world_global(w):
+    global world
+    world = w
 
 def turnleft(face):
     face = face - 1
@@ -48,5 +54,12 @@ def move(x, y, face, strikes = 0):
                 return None
         move(x, y, face, strikes)
 
-move(x, y, face)
-print(res)
+def return_result():
+    return res
+
+def reset_test():
+    global res, visited
+    res = 1
+    visited = set()
+#move(x, y, face)
+#print(res)
