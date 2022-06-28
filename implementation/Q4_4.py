@@ -26,12 +26,6 @@ def turnleft(face):
         face = 3
     return face
 
-def walkback(x, y, face):
-    face += 2
-    if face > 3:
-        face = face % 2
-    return x + dx[face], y + dy[face]
-
 #Given x, y is space of the map 
 #return true if player can move there
 def canmove(x, y):
@@ -47,7 +41,7 @@ def move(x, y, face, strikes = 0):
     else:
         strikes += 1
         if strikes > 3:
-            x, y = walkback(x, y, face)
+            x, y = x - dx[face], y - dy[face]
             if world[x][y] == 0:
                 move(x, y, face)
             else:
