@@ -1,40 +1,27 @@
+from bisect import bisect_left, bisect_right
 def solution(words, queries):
-    def binary_search(arr, query):
-        #find right idx
-        length = len(query)
-        head, tail = 0, len(arr) - 1
-        left, right = head, tail
-        while head <= tail:
-            mid = (head + tail) // 2
-            if length < len(arr[mid]):
-                tail = mid - 1
-            elif length >= len(arr[mid]):
-                right = mid
-                head = mid + 1            
-        #find left idx
-        head, tail = 0, len(arr) - 1
-        while head <= tail:
-            mid = (head + tail) // 2
-            if length <= len(arr[mid]):
-                left = mid
-                tail = mid - 1
-            elif length > len(arr[mid]):
-                head = mid + 1            
-        return left, right
+    def findEndpoints(arr, left, right):
+        l = bisect_left(arr, left)
+        r = bisect_right(arr, right)
+        return l, r
         
-    words.sort(key = lambda x: len(x))
+    bin = [[] for _ in range(10001)]
+    reversedBin = [[] for _ in range(10001)]
+    for w in words:
+        bin[len(w)].append(w)
+        reversedBin[len(w)].append(w[::-1])
+
     answer = []
     for q in queries:
-        l, r = binary_search(words, q)
         prefix = True if q[-1]=='?' else False
-        to_match = q.strip('?')        
-        count = 0
-        for w in words[l:r+1]:
-            w = w[0:len(to_match)] if prefix else w[len(q) - len(to_match):]
-            if to_match in w:
-                #print(to_match, w)
-                count += 1
-        answer.append(count)
+        if prefix:
+            w = sorted(bin[len(q)])
+        else:
+            w = sorted(reversedBin[len(q)])
+            q = q[::-1]
+        left, right = q.replace('?', 'a'), q.replace('?', 'z')
+        l, r = findEndpoints(w, left, right)
+        answer.append(r - l)
             
     return answer
 
