@@ -1,31 +1,19 @@
 from itertools import permutations
 def solution(n, weak, dist):
-    world = [0] * n
-    for w in weak:
-        world[w] = 1    
-
-    dist = sorted(dist, reverse=True)
     doubleWeak = weak + [w + n for w in weak]
 
     best = len(dist) + 1
-    for start in range(len(doubleWeak)):
+    for start in range(len(weak)):
         for p in permutations(dist, len(dist)):
-            fixed = []
-            working = 0                  
-            idx = start
-            for w in p:
-                working += 1
-                pos = doubleWeak[idx] 
-                cover = list(range(pos, pos + w + 1))
-                while idx < len(doubleWeak) and doubleWeak[idx] <= pos + w:
-                    if doubleWeak[idx] in cover:
-                        fixed.append(doubleWeak[idx])
-                        idx += 1
-                if idx >= len(doubleWeak):
-                    break
-                if len(fixed) == len(weak):
-                    best = min(best, working)
-                    break
+            working = 1                  
+            cover = doubleWeak[start] + p[working -1]
+            for idx in range(start, start + len(weak)):
+                if cover < doubleWeak[idx]:
+                    working += 1
+                    if working > len(dist):
+                        break
+                    cover = doubleWeak[idx] + p[working - 1]
+            best = min(best, working)
     if best == len(dist) + 1:
         return -1
     return best
