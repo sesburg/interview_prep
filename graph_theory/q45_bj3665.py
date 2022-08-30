@@ -25,8 +25,8 @@ for _ in range(numTest):
         top.append(rank[r-1])
     #Apply changes
     for t1, t2 in changes:
-        c1 = prevYear[t1-1]
-        c2 = prevYear[t2-1]
+        c1 = prevYear.index(t1) + 1
+        c2 = prevYear.index(t2) + 1
         #switch edges
         if c1 < c2:
             graph[t1].remove(t2)
